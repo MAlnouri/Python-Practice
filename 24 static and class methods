@@ -1,0 +1,56 @@
+'''
+class methods are bound to the class
+they have access to state of the class and take it as a parameter
+points to the class, not object instance
+can modify class state and would apply to all instances
+
+static methods are bound to the class
+they cannot modify or access the class state
+in general, they know nothing about the class state
+it is present/bound to a class because it makes sense
+'''
+
+class Dog:
+    '''
+    this is a class variable, typically at top of the class
+    to reference, must be inside the class
+    useful to have for variables that every object in your class needs to use
+    '''
+    dogs = [] # this list belongs to the class dog, not the instance of the object dog
+    xc = 5
+
+    def __init__(self, name):
+        self.name = name
+        # appending every dog object created to the dogs list
+        # 
+        self.dogs.append(self)
+
+    '''
+    static and class methods
+
+    class methods
+    '''
+    # these are called decorators, placed above a method
+    @classmethod
+    # class methods take the class as a parameter
+    def num_dogs(cls):
+        return len(cls.dogs)
+
+    @staticmethod
+    def bark(n):
+        # barks n times
+        # _ stores value in interpretter
+        # used to ignore values, go thru loops, etc
+        for _ in range(n):
+            print('Bark!')
+        
+
+tim = Dog('tim')
+jim = Dog('jim')
+# class variable can be accessed without an instance of dog object
+print(Dog.dogs)
+# class method can be called through the dog class, does not need instance dog object
+print(Dog.num_dogs())
+
+# static methods dont need a class to be referenced / called
+Dog.bark(5)

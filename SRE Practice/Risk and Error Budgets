@@ -1,0 +1,25 @@
+Trying to go for 100% availability isn't ideal
+- expensive
+- technically complex
+- users don't see the benefit of it (b/c of end reliability somewhere else)
+ex: your cell phone service has 99.9% reliability, but your cell phone only has 95% reliability
+users will never experience the 99.9% service because their phone fails first
+
+we want to reduce risk of system failures but we have to accept some degree of risk in order to deliver products and features
+
+work with product management team to figure out explicit goal for availability
+things to consider:
+- how much will it cost to add extra fault tolerance
+- cost to add extra testing time
+- cost to reduce frequency of pushes
+- cost increase how long it takes to decide a release is good
+-- compared to benefits of user for increased reliability
+
+acceptable risk of a system dictates the SLO
+and SLO mathematically defines the error budget
+- if service incurs too much down time, we must reduce risk to remain within the SLO (like halting deployments)
+if service owners want to deliver lots of risky features, they have to be willing to accept looser SLO
+
+Error Budget
+a quantitative measurement shared between product and SRE teams
+used to balance innovation and stability
