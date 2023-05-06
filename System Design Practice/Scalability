@@ -1,0 +1,52 @@
+Vertical Scaling
+- cpu: cores, l2 cache
+- disk: pata, sata, raid
+- ram
+Get more resources: more ram, disk space, cpu, etc.
+Not a full solution, ceiling is constrained by the machines you can buy
+
+Horizontal Scaling
+Scale by having a large amount of servers (maybe less high tech): data centers
+Using multiple servers to build out your topology
+When we get a request, we want to distribute that request over the web servers
+
+Because of this we need to implement a load balancer to distribute or balance requests between the large amount of servers
+IP address located on the load balancer which figures out how to route and handle the requests
+Bonus of your servers having private IPs (don't have to be registered online) as they are only accessed by the load balancer
+
+How do we choose non busy servers
+Round robin method: use DNS to return IP address of each server linearly for each request, 1, 2, 3, 4...
+Simple to implement
+con is by random, 1 user request could be very computationally difficult resulting in the next requests for that server taking more time to complete
+caching can also send you to the same server on different requests and result in unbalanced loads
+
+RAID: Redundant Array of Independant Disks
+RAID0, RAID1, RAID5, RAID6...
+Raid0 Striping: write a little bit of data on 1 drive, then the 2nd drive, back and forth
+- saves a little bit of time between writing
+Raid1 Redudancy: writes same data parallel on 2 drives at same time
+- if one drive fails, you have backup data ready to go
+Raid10
+- 4 drives implements striping and redundancy
+Raid5
+- only 1 of 5 drives is used for redundancy
+
+Sticky Sessions
+- Shared file storage: Fibre Channel(FB), MySQL(store session data into database), etc.
+- Cookies
+
+Load Balancers
+- Software: Amazone Elastic Load Balancer(ELB), HAProxy, Linux Virtual Server(LVS)
+- Hardware: Barracude, Cisco, Citrix, F5
+Hardware is generally incredibly more expensive (20k+ for a single load balancer)
+
+
+Database Replication
+- Having a database with redudant copies (master and slave)
+- Good for read heavy requests, still have point of failure for write if master goes down
+- Takes time to setup a slave server as temp/new master
+Master-Master replication
+- 2 master servers also replicate writes to each other
+- Still have a master available if one goes down
+
+Database Partitioning
