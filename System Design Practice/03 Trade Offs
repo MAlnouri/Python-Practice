@@ -1,0 +1,49 @@
+Everything is a trade off
+- Performance vs scalability
+- Latency vs throughput
+- Availability vs consistency
+
+
+1. Performance vs scalability
+    a service is scalable if it results in increased performance proportional to resources added
+    in general, increasing perf means serving more units of work but can also be to handle larger units of work, like when datasets grow
+
+    another way to look at it
+    - if you have performance problem, your system is slow for single user
+    - if you have scalability problem, your system is fast for single user but slow under heavy load
+
+    in distributed systems there are other reasons to add resources to a system
+    - improve reliablity of offered service
+    - introduce redundancy, important first line of defense against failures
+    an always on service is said to be scalable if adding resources for redundancy does not result in loss of performance
+
+    we must architect and engineer our systems with scalability in mind to achieve good scalable systems
+
+
+2. Latency vs throughput
+    Latency is the time to perform some action or produce a result
+    throughput is the number of such actions or results per unit of time
+    in general, aim for maximal throughput with acceptable latency
+
+
+3. Availability vs consistency
+    CAP theorem
+    in a distributed computer system, you can only support 2 of the following guarantees
+    - consistency: every read receieves the most recent write or an error
+    - availability: every request receieves a response, w/o guarantee that it contains most recent version of the info
+    partition tolerance: the system continues to operate despite arbitrary partitioning due to network failures
+
+    in centralized systems ex: Relational Database Management System(RDBMS)
+    we don't have network partitions(P), so we get (AC) availability and consistency
+    in distributed systems networks aren't reliable so you need to support partition tolerance(P)
+    and need to make a software trade off between consistency and availability (A or C)
+
+    CP: consistency and partition tolerance
+        waiting for response from partitioned node might result in timeout error
+        CP is good choice if your business needs require atomic reads and writes
+    
+    AP: availability and partition tolerance
+        responses return the most readily available version of the data on any node
+        might not be the latest
+        writes might take some time to propagate when partition is resolved
+        AP is a good choice if the business needs to allow for eventual consistency or when they system needs to continue working despite external errors
