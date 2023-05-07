@@ -1,0 +1,105 @@
+Clones
+- first golden rule for scalability:
+    every server contains exactly the same codebase and does not store any user related data
+    like sessions, profile pictures on local disc or memory
+
+Sessions need to be stored in a centralized data store which is accessible to all application servers
+- can be external database or external persistent cache (better performance than db)
+
+Deployment to all servers
+- solved by tool, Capistrano
+
+After outsourcing sessions and serving same codebase from all servers
+can now create image file from one of the servers
+AWS calls this AMI - Amazon Machine Image
+AMI is used as a super clone that all new instances are based on
+when you start new instance/clone, just do an initial deployment of your latest code
+this allows you to easily scale your servers horizontally
+
+
+Databases
+after scaling horizontally, application gets slowers, because of the database MySQL
+to solve this we can choose from 2 paths
+
+Path 1: stick with MySQL, hire database admin(dba), do master-slave replication(read from slaves, write to master) and upgrade master by adding RAM.
+- persistant issues arise: sharding, denormalization, SQL tuning
+- issue is every new action to keep database running will be more expensive and time consuming
+
+Path 2: denormalize and include no more Joins in any database query
+- can stay with MySQL and use it like a NoSQL database
+- or switch to better and easier to scale NoSQL database(MongoDB or CouchDB)
+joins will now need to be done in your application code
+sooner you do this step, less code you will have to change in the future
+- even if you switch successfully to NoSQL and let app do dataset-joins, database requests will become slower
+- will eventually need to introduce a cache
+
+
+Caches
+after following step 2, we have a scalable database solution
+but now users suffer slow page requests when a lot of data is fetched from the database
+solution is to implement a cache
+in-memory caches (like Memcached or Redis)
+- never do file-based caching? ir makes cloning and auto scaling of servers a pain
+
+cache is simply key-value store and resides in buffer layer between application and data storage
+whenever app has to read data, try to retrieve it from the cache
+if its not in the cache, trys the main data source
+- caches are fast, holding datasets in ram and requests are handled quickly
+
+2 pattersn of caching
+1. Cache Database Queries
+- the most commonly used caching pattern
+    whenever you do a query, you store the result dataset
+    hashed version of your query is the key
+    next time you run the query you check at the cache if there is a result
+- issues
+    expiration, hard to delete a cached result when you cache a complex query
+    ex: when a piece of data changes (like a table cell), you need to delete all cached queries that may include that table cell
+
+2. Cached Objects
+- see your data as an object like you do in code (classes, instances, etc.)
+    let class assemble a dataset from db and store the instance of it in the cache
+    ex: class called 'product' which has property called 'data'
+    data is an array containing prices, texts, pictures and customer reviews of product
+    data property is filled by several methods in the class doing several db requests which are hard to cache since many things relate to each other
+    now when your class has finished making the data array, store the array in the cache
+    - this allows to easily get rid of object whenever something changed
+    - makes overall operation of code faster and more logical
+    - makes asynchronous processing possible
+some ideas of objects to cache:
+- user sessions (never use the database)
+- fully rendered blog articles
+- activity streams
+- user <-> friend relationships
+
+
+Asynchronism
+    imagine you want to buy bread at fav bakery
+    go into bakery, ask for loaf but there is no bread
+    instead, you are asked to come back in 2 hrs for your bread
+    - to avoid waiting situations, asynchronism needs to be done
+
+2 ways / paradigms asynchronism can be done
+
+Async #1
+    first way of processing is 'bake the breads at night, sell in morning'
+    - no waiting at cash register
+    - in web apps, this means doing time consuming work in advance and serving finished work with low request time
+
+    very often this paradigm is used to turn dynamic content into static content
+    - pages of website built with massive frameworks or CMS are pre-rendered and locally stored as static HTML files on every change
+    - this pre computing can exteremly improve websites and web apps, making them scalable and performant
+
+Async #2
+    sometimes customers had special requests like a birthday cake with 'happy bday steve'
+    bakery cannot foresee these kind of requests so starts task and asks them to come back next day
+    - referring to web service, that means to handle tasks asynchronously
+
+    typical workflow:
+    user comes to website and starts computing intensive task which takes few minutes to finish
+    frontend of your site sends a job onto a job queue and signals back to user: your request is processing, continue to browse the page
+    job queue is checked and after job is done, worker sends signal
+    frontend constantly checks for 'job is done' signal, and informs user about it
+    - RabbitMQ is a system to help implement async processing (also ActiveMQ or simple Redis list)
+    - backends become nearly infinitely scalable and frontends become snappy(good for user experience)
+    - if you do something time-consuming, try to do it asynchronously

@@ -50,3 +50,5 @@ Master-Master replication
 - Still have a master available if one goes down
 
 Database Partitioning
+- Dividing stored database objects into separate parts
+- Increases controllability, performance and availability of large database objects
