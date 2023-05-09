@@ -1,0 +1,28 @@
+DNS translates a domain name such as www.example.com to in IP address
+
+DNS i hierarchical with few authoritative servers at top level
+your router or ISP provides info about which DNS servers to contact when doing a lookup
+lower level DNS servers cache mappings
+can also be cached by browser or OS for some time (based on TTL/time to live)
+
+    NS record (name server) - specifies the DNS servers for your domain/subdomain
+    MX record (mail exchange) - specifies the mail servers for accepting messages
+    A record (address) - points a name to an IP address
+    CNAME (canonical) - points a name to another name or CNAME or to an A record
+        - example.com points to www.example.com
+
+services like cloudflare and route 53 provide managed DNS services
+some DNS services can route traffic thru various methods
+    weighted round robin
+        prevents traffic from going to servers under maintenance
+        balance between varying cluster sizes
+        A/B testing
+    latency-based
+    geolocation-based
+
+Disadvantages: DNS
+    accessing DNS server introduces slight delay, although mitigated by caching
+    DNS server management could be complex, generally managed by govs, ISPs, and large companies
+    DNS services have recently come under DDoS attacks, preventing users from accessing websites such as twitter without knowing twitters IP address(es)
+
+    

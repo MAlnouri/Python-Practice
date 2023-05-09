@@ -1,0 +1,22 @@
+With multiple copies of same data, we are faced with options on how to sync them
+this is so clients have consistent view of the data
+
+Consistency (CAP): every read receives the most recent write or an error
+
+Weak Consistency
+    after a write, reads may or may not see it, best effort approach is taken
+    seen in systems such as memcached
+    works well in real time use cases such as VoIP, video chat, multiplayer games
+    ex: on a phone call and lose reception, regain connection, you don't hear everything spoken during connection loss
+
+Eventual Consistency
+    after a write, reads will eventually see it (typically in ms)
+    data is replicated asynchronously
+    seen in systems such as DNS and email
+    works well in highly available systems
+
+Strong Consistency
+    after a write, reads will see it
+    data is replicated synchronously
+    approach is seen in file systems and RDBMSes
+    works well in systems that need transactions

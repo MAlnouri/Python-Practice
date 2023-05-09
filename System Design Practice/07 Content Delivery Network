@@ -1,0 +1,30 @@
+CDN is a globally distrubted network of proxy servers
+serving content from locations closer to user
+generally static files like html/css/js, photos, videos are served from CDN
+some CDNs like Amazon's CloudFront support dynamic content
+site's DNS resolution will tell clients which server to contact
+
+serving content from CDNs can significantly improve performance in 2 ways:
+    users receive content from data centers close to them
+    your servers do not have to serve requests that the CDN fulfills
+
+Push CDNs
+    Push CDNs receive new content whenever changes occur on your server
+    you take responsibility for providing content, uploading directly to CDN, rewriting URLs to point to CDN
+    you can configure when content expires and when it updates
+    content is uploaded only when it is new or changed, minimizes traffic but maximizes storage
+    sites with small amount of traffic or sites with content that isn't updated often work well with push CDNs
+    content is placed on the CDNs once, instead of being re-pulled at regular intervals
+
+Pull CDNs
+    Pull CDNs grab new content from your server when the first user requests the content
+    you leave content on your server and rewrite URLs to point to the CDN
+    this results in slower request until the content is cached on the CDN
+    A time to live (TTL) determines how long content is cached
+    pull CDNs minimize storage space on the CDN but can create redundant traffic if files expire and are pulled before they have actually changed
+    sites with heavy traffic work well with pull CDNs, as traffic is spread out more evenly with only recently requested content remaining on the CDN
+
+Disadvantages: CDN
+    CDN costs could be significant depending on traffic, although this should be weighed with additional costs you would incur not using a CDN
+    content might be stale if it is updated before TTL expires it
+    CDNs require changing URLs for static content to point to the CDN

@@ -1,0 +1,43 @@
+2 complementary patterns to support high avilability
+Fail-over and Replication
+
+Fail-over
+    Active-passive
+        with active passive fail over, heartbeats are sent between active and passive server on standby
+        if heartbeat is interrupted, passive server takes over active's IP and services
+        length of downtime is by whether the passive server is running 'hot' in standy or needs 'cold' startup
+        can also be referred to as master-slave fail-over
+
+    Active-active
+        both servers are managing traffic, spreading the load between them
+        if servers are public facing, DNS needs to know both public IPs of the servers
+        if servers are internal facing, application logic needs to know about both servers
+        also referred to as master-master fail-over
+
+    Cons
+        fail-over adds more hardware and additional complexity
+        there is potential for loss of data if active system fails before any newly written data can be replicated to passive
+
+
+Replication
+    Master-slave and Master-master replications
+    
+    Availability in numbers
+    availability is often quantified by uptime (or downtime) as percentage that service is available
+    measured in number of 9s, 99.99% is 4 9s
+    3 9s = ~8-9hrs downtime/year
+    4 9s = ~52 min downtime/year
+    5 9s = ~5 min downtime/year
+
+
+    Availability in parallel vs in sequence
+    if a service consists of multiple components prone to failure, the overal availability depends on if the components are in sequence or parallel
+
+    - In sequence
+        overall availability decreases when 2 components with <100% are in sequence
+        avail (total) = avail(foo) * avail(bar)
+        if foo = bar = 99.9% avail -> total avail = 99.8%
+    - In parallel
+        overall avail increases when 2 components with <100% are in parallel
+        avail (total) = 1 - (1 - avail(foo)) * (1 - avail(bar))
+        if foo = bar = 99.9% avail -> total avail = 99.9999%
