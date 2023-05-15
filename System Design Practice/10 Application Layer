@@ -1,0 +1,24 @@
+separating out web layer from application layer (aka platform layer) allows you to scale and configure both layers independantly
+adding new API results in adding application servers w/o neccessarily adding more web servers
+single responsibility principle advocates for small and autonomous services that work together
+small teams with small services can plan more agressively for rapid growth
+workers in application layer also help enable asynchronism
+
+Microservices
+    described as a suite of indenpendantly deployable, small, modular services
+    each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal
+    ex: Pinterest could have these microservices:
+    - user profile
+    - follower
+    - feed
+    - search
+    - photo upload, etc.
+
+Service Discovery
+    systems like Consul, Etcd, Zookeeper can help services find each other by keeping track of registered names, addresses and ports
+    health checks help verify service integrity and are often done use HTTP endpoint
+    Consul and Etcd have built in key-value store that can be useful for storing config values and orther shared data
+
+Disadvantages: Application Layer
+    adding application layer with loosely coupled services requires different qapproach from an architectural, operations and process viewpoint (vs a monolithic system)
+    microservices can add complexity in terms of deployments and operations

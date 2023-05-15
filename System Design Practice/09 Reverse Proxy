@@ -1,0 +1,26 @@
+reverse proxy is a web server that centralizes internal services and provides unified interfaces to the public
+requests from clients are forwarded to a server that can fulfill it before reverse proxy returns the server's response to the client
+
+additional benefits include:
+    increased security
+    - hide info about backend servers
+    - blacklist IPs
+    - limit # of connections to client
+
+    increased scalability and flexibility
+    - clients only see reverse proxy IP, allows you to scale servers or change their config
+    - SSL termination, decrypt incoming requests, encrypt server responses so backend server don't have to perform expensive operations
+    - compression, compress server responses
+    - caching, return the response for cached requests
+    - static content, server static content directly (html/css/js, photos, videos, etc)
+
+Load Balancer vs Reverse Proxy
+    deploying lb is useful when you have multiple servers
+    often lbs route traffic to a set of servers serving the same function
+    
+    rp can be useful even with just one web server or application server
+    solutions such as NGINX and HAProxy can support both layer 7 rping and lbing
+
+disadvantages: reverse proxy
+    rp results in increased complexity
+    single rp is single point of failure, having multiple further increases complexity
